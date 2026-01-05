@@ -64,16 +64,19 @@ const totalQty = computed(() => products.reduce((sum, product) => sum + product.
 const totalValue = computed(() =>
   products.reduce((sum, product) => sum + product.price * product.qty, 0),
 )
-
-const handlePrint = () => {}
 </script>
 
 <template>
-  <div class="app">
+  <div class="app" id="printArea">
     <header class="header">
       <h1>Products List</h1>
-      <button class="print-button" type="button" @click="handlePrint">Print</button>
+      <button class="print-button" type="button" v-print="'#printArea'">Print</button>
     </header>
+
+    <p class="text">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat iusto optio assumenda
+      sapiente ducimus, reprehenderit fugit mollitia distinctio natus animi.
+    </p>
 
     <table class="products-table">
       <thead>
@@ -84,7 +87,7 @@ const handlePrint = () => {}
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in products" :key="product.id">
+        <tr v-for="product in products" :key="product.id" class="product-item">
           <td>
             <div class="product-name">
               <img class="product-image" :src="product.image" :alt="product.name" />
@@ -124,6 +127,9 @@ const handlePrint = () => {}
 </template>
 
 <style scoped>
+.text {
+  display: none;
+}
 .app {
   max-width: 900px;
   margin: 40px auto;
@@ -263,5 +269,22 @@ const handlePrint = () => {}
   margin-top: 4px;
   font-size: 18px;
   font-weight: 600;
+}
+
+@media print {
+  @page {
+    margin: 0 30px;
+  }
+  .print-button,
+  .header h1 {
+    display: none !important;
+  }
+  .text {
+    display: block !important;
+  }
+  .product-item {
+    /* page-break-inside: avoid; */
+    break-inside: avoid;
+  }
 }
 </style>
